@@ -21,7 +21,7 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
-        url: 'https://eth-mainnet.g.alchemy.com/v2/TVAtmn6ES2BGwWHYa3ZG9',
+        url: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
       },
     },
   },
