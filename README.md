@@ -49,12 +49,6 @@ const symbol1 = "DAI";
 const decimals1 = 18;
 const address1 = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
-# //SECOND PACKAGE.JSON FILE
-
-{
-"name": "uniswapclone",
-"version": "0.1.0",
-
 ## Running scripts and tests
 
 This project includes a few npm scripts in `package.json` for running tests and deploying locally. Before running the test script you should start a Hardhat node that is forked from mainnet (so tests that depend on on-chain state or token holders will work).
@@ -80,7 +74,7 @@ Note: The project `hardhat.config.js` already configures the `hardhat` network f
 
 ```powershell
 # PowerShell example (temporary for the session)
-$env:ALCHEMY_API_KEY = "YOUR_ALCHEMY_KEY"; npx hardhat node
+$env:ALCHEMY_API_KEY = "YOUR_ALCHEMY_KEY"; 
 ```
 
 Once the forked node is running in a separate terminal, run the test script in this repository's root (tests will connect to the local network):
