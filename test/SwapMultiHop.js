@@ -24,24 +24,24 @@ describe("SwapMultiHop",()=>{
         dai= await ethers.getContractAt("IERC20",DAI);
         usdc= await ethers.getContractAt("IERC20",USDC);
 
-        console.log(weth);
-        console.log(dai);
-        console.log(usdc);
+        console.log(weth.address);
+        console.log(dai.address);
+        console.log(usdc.address);
     });
-    // it("swapExactInputMutliHop",async()=>{
-    //     const amountIn=10n**18n;
-    //     console.log(accounts[0].address);
-    //     console.log("Dai balance before",await dai.balanceOf(accounts[0].address));
-    //     await weth.deposit({value:amountIn});
-    //     console.log("Weth balance before",await weth.balanceOf(accounts[0].address));
-    //     await weth.approve(swapMultiHop.address,amountIn);
-    //     await swapMultiHop.swapExactInputMultiHop(amountIn);
-    //     console.log("Dai balance",await dai.balanceOf(accounts[0].address));
+    it("swapExactInputMutliHop",async()=>{
+        const amountIn=10n**18n;
+        console.log(accounts[0].address);
+        console.log("Dai balance before",await dai.balanceOf(accounts[0].address));
+        await weth.deposit({value:amountIn});
+        console.log("Weth balance before",await weth.balanceOf(accounts[0].address));
+        await weth.approve(swapMultiHop.address,amountIn);
+        await swapMultiHop.swapExactInputMultiHop(amountIn);
+        console.log("Dai balance",await dai.balanceOf(accounts[0].address));
         
-    //     console.log(weth);
-    //     console.log(dai);
-    //     console.log(usdc);
-    // });
+        // console.log(weth);
+        // console.log(dai);
+        // console.log(usdc);
+    });
     it("swapExactOutputSingle",async()=>{
         const wethAmountInMax=10n**18n;
         const daiAmountOut=10n*10n**18n;
