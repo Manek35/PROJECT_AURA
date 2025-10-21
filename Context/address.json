@@ -1,7 +1,7 @@
 {
   "network": "localhost",
   "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  "timestamp": "2025-10-21T09:39:48.364Z",
+  "timestamp": "2025-10-21T14:08:31.988Z",
   "contracts": {
     "BooCoin": "0x622703b79B515d93F5c48C7C7dfdCf24d110f1CC",
     "AuraCoin": "0xd26ffB5e404F5Dc3bF07d9c214957b2731E8EB9b",
