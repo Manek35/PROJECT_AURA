@@ -1,26 +1,21 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
-//INTERNAL IMPORT
+// INTERNAL IMPORT
 import Style from "./HeroSection.module.css";
-import images from "../../assets";
-// import { Token, SearchToken } from "../index";
+import images from "../../assets"; // Make sure your image files are correct
 import Token from "../Token/Token";
 import SearchToken from "../SearchToken/SearchToken";
-
-// import Token from "../index";
 
 const HeroSection = ({ accounts, tokenData }) => {
   const [openSetting, setOpenSetting] = useState(false);
   const [openToken, setOpenToken] = useState(false);
   const [openTokensTwo, setOpenTokensTwo] = useState(false);
 
-  //TOKEN 1
   const [tokenOne, setTokenOne] = useState({
     name: "",
     image: "",
   });
-  //TOKEN 2
 
   const [tokenTwo, setTokenTwo] = useState({
     name: "",
@@ -30,12 +25,13 @@ const HeroSection = ({ accounts, tokenData }) => {
   return (
     <div className={Style.HeroSection}>
       <div className={Style.HeroSection_box}>
+        {/* Header */}
         <div className={Style.HeroSection_box_heading}>
           <p>Swap</p>
           <div className={Style.HeroSection_box_heading_img}>
             <Image
               src={images.close}
-              alt="image"
+              alt="close"
               width={50}
               height={50}
               onClick={() => setOpenSetting(true)}
@@ -43,9 +39,10 @@ const HeroSection = ({ accounts, tokenData }) => {
           </div>
         </div>
 
+        {/* Token One Input */}
         <div className={Style.HeroSection_box_input}>
           <input type="text" placeholder="0" />
-          <button onClick={() => openToken(true)}>
+          <button onClick={() => setOpenToken(true)}>
             <Image
               src={images.image || images.etherlogo}
               width={20}
@@ -56,12 +53,13 @@ const HeroSection = ({ accounts, tokenData }) => {
             <small>9474</small>
           </button>
         </div>
-        {/* help */}
+
+        {/* Token Two Input */}
         <div className={Style.HeroSection_box_input}>
           <input type="text" placeholder="0" />
-          <button onClick={() => openToken(true)}>
+          <button onClick={() => setOpenTokensTwo(true)}>
             <Image
-              src={images.image || images.etherlogo}
+              src={tokenTwo.image || images.etherlogo}
               width={20}
               height={20}
               alt="ether"
@@ -71,6 +69,7 @@ const HeroSection = ({ accounts, tokenData }) => {
           </button>
         </div>
 
+        {/* Action Button */}
         {accounts ? (
           <button className={Style.HeroSection_box_btn}>Connect Wallet</button>
         ) : (
@@ -80,7 +79,9 @@ const HeroSection = ({ accounts, tokenData }) => {
         )}
       </div>
 
+      {/* Modals */}
       {openSetting && <Token setOpenSetting={setOpenSetting} />}
+
       {openToken && (
         <SearchToken
           openToken={setOpenToken}
@@ -89,7 +90,7 @@ const HeroSection = ({ accounts, tokenData }) => {
         />
       )}
 
-      {openToken && (
+      {openTokensTwo && (
         <SearchToken
           openToken={setOpenTokensTwo}
           tokens={setTokenTwo}

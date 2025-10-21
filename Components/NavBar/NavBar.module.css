@@ -72,8 +72,9 @@
 
 .NavBar_box_right_box p {
   font-size: 1.2rem;
-  line-height: 0;
+  line-height: 1.2; /* ✅ Fix overlapping */
   color: #cff80b;
+  white-space: nowrap; /* ✅ Prevents text from breaking */
 }
 
 .NavBar_box_right button {

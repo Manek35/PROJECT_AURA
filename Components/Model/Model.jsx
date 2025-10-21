@@ -28,7 +28,7 @@ const Model = ({ setOpenModel, connectWallet }) => {
             </p>
           ))}
         </div>
-        I
+
         <p className={Style.Model_box_para}>
           By connecting a wallet, you agree to Uniswap Labs
           <br /> Terms of Service and consent to its Privacy Policy
