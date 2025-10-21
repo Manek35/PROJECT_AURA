@@ -1,114 +1,8 @@
-
 # Building and Deploying a Uniswap Exchange Clone for DeFi
 
 Enter the world of decentralized finance (DeFi) with our Uniswap Exchange clone, UniClone. This project focuses on replicating the functionalities of the popular decentralized exchange Uniswap, providing users with a seamless and efficient platform for swapping tokens, providing liquidity, and earning fees.
 
 UniClone leverages smart contracts and blockchain technology to enable trustless and permissionless token swaps directly from users' wallets. By replicating Uniswap's automated market maker (AMM) mechanism, our clone ensures liquidity for all listed tokens and allows users to trade without the need for traditional order books or centralized intermediaries.
-
-## Project Overview
-
-![alt text](https://www.daulathussain.com/wp-content/uploads/2023/04/Uniswap-clone.jpg)
-
-## Instruction
-
-Kindly follow the following Instructions to run the project in your system and install the necessary requirements
-
-
-- [Final Source Code](https://www.theblockchaincoders.com/sourceCode/build-uniswap-dapp-project-source-code)
-
-#### Setup Video
-- [Final Code Setup video](https://youtu.be/NAuuGa_7oro?si=hHXzjfPR_mPQx78p)
-
-```https://code.visualstudio.com/download
-  WATCH: Setup & Demo Of Project
-```
-
-#### Install Vs Code Editor
-
-```https://code.visualstudio.com/download
-  GET: VsCode Editor
-```
-
-#### NodeJs & NPM Version
-
-```https://nodejs.org/en/download
-  NodeJs: v18.12.1
-  NPM: 8.19.2
-```
-
-#### Clone Starter File
-
-```https://github.com/daulathussain/Airdrop-Crypto-Starter-File
-  GET: Project Starter File Download
-```
-
-
-All you need to follow the complete project and follow the instructions which are explained in the tutorial by Daulat
-
-## Final Code Instruction
-
-If you download the final source code then you can follow the following instructions to run the Dapp successfully
-
-#### Setup Video
-
-```https://code.visualstudio.com/download
-  WATCH: Setup & Demo Of Project
-```
-
-#### Final Source Code
-
-```https://www.theblockchaincoders.com/SourceCode
-  Download the Final Source Code
-```
-
-#### Install Vs Code Editor
-
-```https://code.visualstudio.com/download
-  GET: VsCode Editor
-```
-
-#### NodeJs & NPM Version
-
-```https://nodejs.org/en/download
-  NodeJs: v18.12.1
-  NPM: 8.19.2
-```
-
-
-#### Test Faucets
-
-Alchemy will provide you with some free test faucets which you can transfer to your wallet address for deploying the contract
-
-```https://www.alchemy.com/faucets
-  Get: Free Test Faucets
-```
-
-#### RemixID
-
-We are using RemixID for deploying the contract and generation of the ABI in the project, but you can use any other tools like Hardhat, etc.
-
-```https://remix-project.org
-  OPEN: RemixID
-```
-
-#### Polygon Mumbai
-
-```https://mumbai.polygonscan.com/
-  OPEN: Polygon Mumbai
-```
-
-## Important Links
-
-- [Get Pro Blockchain Developer Course](https://www.theblockchaincoders.com/pro-nft-marketplace)
-- [Support Creator](https://bit.ly/Support-Creator)
-- [All Projects Source Code](https://www.theblockchaincoders.com/SourceCode)
-
-
-## Authors
-
-- [@theblockchaincoders.com](https://www.theblockchaincoders.com/)
-- [@consultancy](https://www.theblockchaincoders.com/consultancy)
-- [@youtube](https://www.youtube.com/@daulathussain)
 
 
 # IMPORTANT INFO
@@ -155,50 +49,53 @@ const symbol1 = "DAI";
 const decimals1 = 18;
 const address1 = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
-# //SECOND PACKAGE.JSON FILE
+## Running scripts and tests
 
-{
-"name": "uniswapclone",
-"version": "0.1.0",
-"private": true,
-"scripts": {
-"dev": "next dev",
-"build": "next build",
-"start": "next start",
-"lint": "next lint"
-},
-"dependencies": {
-"axios": "^1.2.1",
-"ethers": "^5.7.2",
-"next": "13.0.3",
-"react": "18.2.0",
-"react-dom": "18.2.0",
-"web3modal": "^1.9.9",
-"@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
-"@nomicfoundation/hardhat-network-helpers": "^1.0.8",
-"@uniswap/smart-order-router": "^2.5.30",
-"@nomicfoundation/hardhat-toolbox": "^2.0.2",
-"@nomiclabs/hardhat-ethers": "^2.2.3",
-"@nomiclabs/hardhat-etherscan": "^3.1.7",
-"@openzeppelin/contracts": "^4.8.3",
-"@typechain/ethers-v5": "^10.2.1",
-"@typechain/hardhat": "^6.1.6",
-"@types/chai": "^4.3.5",
-"@types/mocha": "^10.0.1",
-"@uniswap/v3-periphery": "^1.4.3",
-"@uniswap/v3-sdk": "^3.9.0",
-"bignumber.js": "^9.1.1",
-"chai": "^4.3.7",
-"dotenv": "^16.0.3",
-"hardhat": "^2.14.0",
-"hardhat-gas-reporter": "^1.0.9",
-"solidity-coverage": "^0.8.2",
-"ts-node": "^10.9.1",
-"typechain": "^8.1.1",
-"typescript": "^5.0.4"
-}
-}
+This project includes a few npm scripts in `package.json` for running tests and deploying locally. Before running the test script you should start a Hardhat node that is forked from mainnet (so tests that depend on on-chain state or token holders will work).
 
+- To run the scripts defined in `package.json`:
 
+```powershell
+# Run tests (this executes the `test` script defined in package.json)
+npm run test
 
+# Deploy using the `deploy` script
+npm run deploy
+```
 
+- Start a Hardhat node forked from Ethereum mainnet (requires an Alchemy API key). Open a separate terminal and run:
+
+```powershell
+# Replace YOUR_ALCHEMY_KEY with your Alchemy API key
+npx hardhat node --fork https://eth-mainnet.g.alchemy.com/v2/YOUR_ALCHEMY_KEY
+```
+
+Note: The project `hardhat.config.js` already configures the `hardhat` network for forking using the `ALCHEMY_API_KEY` environment variable. If you prefer to use that configuration you can set the environment variable then run a local Hardhat node:
+
+```powershell
+# PowerShell example (temporary for the session)
+$env:ALCHEMY_API_KEY = "YOUR_ALCHEMY_KEY"; 
+```
+
+Once the forked node is running in a separate terminal, run the test script in this repository's root (tests will connect to the local network):
+
+```powershell
+npm run test
+```
+
+Replace `YOUR_ALCHEMY_KEY` with your actual Alchemy API key. Keep the forked node running while running tests or deploy scripts that expect the fork.
+
+### Quick run (concise)
+
+Run deploy:
+
+```powershell
+npm run deploy
+```
+
+Run tests (start a forked Hardhat node first):
+
+```powershell
+# In separate terminal: npx hardhat node --fork https://eth-mainnet.g.alchemy.com/v2/YOUR_ALCHEMY_KEY
+npm run test
+```
