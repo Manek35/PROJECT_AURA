@@ -1,0 +1,11 @@
+{
+  "network": "localhost",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "timestamp": "2025-12-02T09:37:46.224Z",
+  "contracts": {
+    "BooCoin": "0xd31d3e1F60552ba8B35aA3Bd17c949404fdd12c4",
+    "AuraCoin": "0x27F9aFE3B3fCb63ae1A6c662331698F2183809bF",
+    "SingleSwapToken": "0x3CFDf9646dBC385E47DC07869626Ea36BE7bA3a2",
+    "SwapMultiHop": "0x9A213F53334279C128C37DA962E5472eCD90554f"
+  }
+}

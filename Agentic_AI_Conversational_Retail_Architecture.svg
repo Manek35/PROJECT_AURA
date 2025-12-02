@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="900" viewBox="0 0 2000 900">
+  <defs>
+    <linearGradient id="gradBlue" x1="0" x2="1">
+      <stop offset="0" stop-color="#e6f7ff"/>
+      <stop offset="1" stop-color="#d9f0ff"/>
+    </linearGradient>
+    <linearGradient id="gradYellow" x1="0" x2="1">
+      <stop offset="0" stop-color="#fff8e6"/>
+      <stop offset="1" stop-color="#fff5d1"/>
+    </linearGradient>
+    <linearGradient id="gradGreen" x1="0" x2="1">
+      <stop offset="0" stop-color="#f0fff3"/>
+      <stop offset="1" stop-color="#e6fff0"/>
+    </linearGradient>
+    <linearGradient id="gradPurple" x1="0" x2="1">
+      <stop offset="0" stop-color="#f3eaff"/>
+      <stop offset="1" stop-color="#efe4ff"/>
+    </linearGradient>
+    <style>
+      .title { font: 28px Arial, Helvetica, sans-serif; fill: #0b2140; font-weight:700 }
+      .subtitle { font: 14px Arial, Helvetica, sans-serif; fill: #0b2140 }
+      .section-label { font: 18px Arial, Helvetica, sans-serif; fill: #0b2140; font-weight:700 }
+      .box-label { font: 14px Arial, Helvetica, sans-serif; fill: #07203a }
+      .note { font: 12px Arial, Helvetica, sans-serif; fill: #07203a }
+      .legend-title { font: 14px Arial, Helvetica, sans-serif; fill: #07203a; font-weight:700 }
+      .arrow-label { font: 12px Arial, Helvetica, sans-serif; fill: #07203a }
+      .small { font: 11px Arial, Helvetica, sans-serif; fill: #07203a }
+      .icon { opacity: 0.95 }
+      .box { stroke: #cfdbe6; stroke-width:1.5 }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="50%" y="36" class="title" text-anchor="middle">Agentic AI Conversational Retail Assistant – System Architecture</text>
+
+  <!-- Customer Interaction Channels (light blue) -->
+  <g transform="translate(40,80)">
+    <rect x="0" y="0" width="520" height="220" rx="14" ry="14" fill="url(#gradBlue)" class="box" />
+    <text x="18" y="28" class="section-label">Customer Interaction Channels</text>
+
+    <!-- Mobile App Chatbot -->
+    <g transform="translate(20,52)">
+      <rect x="0" y="0" width="220" height="60" rx="10" fill="#ffffff" class="box" />
+      <!-- icon: phone/chat -->
+      <g class="icon" transform="translate(12,8)">
+        <rect x="0" y="0" width="36" height="44" rx="6" fill="#0b6fb6" />
+        <rect x="6" y="6" width="24" height="28" rx="4" fill="#ffffff" />
+        <circle cx="18" cy="36" r="3" fill="#ffffff" />
+      </g>
+      <text x="64" y="36" class="box-label">Mobile App Chatbot</text>
+    </g>
+
+    <!-- Web Chat Widget -->
+    <g transform="translate(20,128)">
+      <rect x="0" y="0" width="220" height="60" rx="10" fill="#ffffff" class="box" />
+      <!-- icon: browser/chat -->
+      <g class="icon" transform="translate(12,8)">
+        <rect x="0" y="0" width="36" height="24" rx="3" fill="#0b6fb6" />
+        <rect x="2" y="4" width="32" height="12" rx="2" fill="#ffffff" />
+        <path d="M6 24 L10 30 L16 24" fill="#0b6fb6" />
+      </g>
+      <text x="64" y="36" class="box-label">Web Chat Widget</text>
+    </g>
+
+    <!-- WhatsApp / Telegram Bot -->
+    <g transform="translate(260,52)">
+      <rect x="0" y="0" width="240" height="60" rx="10" fill="#ffffff" class="box" />
+      <!-- icon: message bubble -->
+      <g class="icon" transform="translate(12,8)">
+        <ellipse cx="18" cy="18" rx="18" ry="14" fill="#1db954" />
+        <rect x="10" y="12" width="16" height="2" fill="#ffffff" rx="1" />
+      </g>
+      <text x="64" y="36" class="box-label">WhatsApp / Telegram Bot</text>
+    </g>
+
+    <!-- In-Store Kiosk / Voice Assistant -->
+    <g transform="translate(260,128)">
+      <rect x="0" y="0" width="240" height="60" rx="10" fill="#ffffff" class="box" />
+      <!-- icon: kiosk/voice -->
+      <g class="icon" transform="translate(12,8)">
+        <rect x="0" y="0" width="28" height="40" rx="4" fill="#0b6fb6" />
+        <circle cx="14" cy="22" r="6" fill="#ffffff" />
+      </g>
+      <text x="64" y="36" class="box-label">In-Store Kiosk / Voice Assistant</text>
+    </g>
+
+    <!-- Arrows from channels to Sales Agent will be drawn after Sales Agent is placed -->
+  </g>
+
+  <!-- Agentic AI Core Layer (soft yellow) -->
+  <g transform="translate(620,80)">
+    <rect x="0" y="0" width="760" height="220" rx="14" ry="14" fill="url(#gradYellow)" class="box" />
+    <text x="18" y="28" class="section-label">Agentic AI Core Layer</text>
+
+    <!-- Sales Agent Orchestrator central box -->
+    <g transform="translate(240,48)">
+      <rect x="0" y="0" width="280" height="120" rx="12" fill="#fff7d9" stroke="#f0d77a" stroke-width="1.5" />
+      <text x="18" y="36" class="box-label" font-weight="700">Sales Agent (Orchestrator)</text>
+      <text x="18" y="60" class="note">Manages conversation flow, routes tasks to worker agents</text>
+      <text x="18" y="78" class="note">Handles dialogue management & context switching</text>
+    </g>
+
+  </g>
+
+  <!-- Worker Agents Layer (light green) -->
+  <g transform="translate(620,320)">
+    <rect x="0" y="0" width="760" height="260" rx="14" ry="14" fill="url(#gradGreen)" class="box" />
+    <text x="18" y="28" class="section-label">Worker Agents Layer</text>
+
+    <!-- Worker agent boxes laid out horizontally -->
+    <g transform="translate(24,56)">
+      <!-- Recommendation Agent -->
+      <g transform="translate(0,0)">
+        <rect x="0" y="0" width="180" height="60" rx="10" fill="#ffffff" class="box" />
+        <text x="18" y="36" class="box-label">Recommendation Agent</text>
+      </g>
+
+      <!-- Inventory Agent -->
+      <g transform="translate(200,0)">
+        <rect x="0" y="0" width="180" height="60" rx="10" fill="#ffffff" class="box" />
+        <text x="18" y="36" class="box-label">Inventory Agent</text>
+      </g>
+
+      <!-- Payment Agent -->
+      <g transform="translate(400,0)">
+        <rect x="0" y="0" width="180" height="60" rx="10" fill="#ffffff" class="box" />
+        <text x="18" y="36" class="box-label">Payment Agent</text>
+      </g>
+
+      <!-- Fulfillment Agent -->
+      <g transform="translate(600,0)">
+        <rect x="0" y="0" width="180" height="60" rx="10" fill="#ffffff" class="box" />
+        <text x="18" y="36" class="box-label">Fulfillment Agent</text>
+      </g>
+
+      <!-- Loyalty & Offers Agent -->
+      <g transform="translate(0,90)">
+        <rect x="0" y="0" width="260" height="60" rx="10" fill="#ffffff" class="box" />
+        <text x="18" y="36" class="box-label">Loyalty & Offers Agent</text>
+      </g>
+
+      <!-- Post-Purchase Support Agent -->
+      <g transform="translate(300,90)">
+        <rect x="0" y="0" width="260" height="60" rx="10" fill="#ffffff" class="box" />
+        <text x="18" y="36" class="box-label">Post-Purchase Support Agent</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Data & Integration Layer (light purple) -->
+  <g transform="translate(1400,80)">
+    <rect x="0" y="0" width="560" height="500" rx="14" ry="14" fill="url(#gradPurple)" class="box" />
+    <text x="18" y="28" class="section-label">Data & Integration Layer (Backend Services)</text>
+
+    <g transform="translate(24,56)">
+      <rect x="0" y="0" width="500" height="64" rx="10" fill="#ffffff" class="box" />
+      <text x="18" y="38" class="box-label">Customer Profile Database</text>
+
+      <rect x="0" y="84" width="500" height="64" rx="10" fill="#ffffff" class="box" />
+      <text x="18" y="104" class="box-label">Product Catalog API</text>
+
+      <rect x="0" y="168" width="500" height="64" rx="10" fill="#ffffff" class="box" />
+      <text x="18" y="188" class="box-label">Inventory Server</text>
+
+      <rect x="0" y="252" width="500" height="64" rx="10" fill="#ffffff" class="box" />
+      <text x="18" y="272" class="box-label">Payment Gateway Stub</text>
+
+      <rect x="0" y="336" width="500" height="64" rx="10" fill="#ffffff" class="box" />
+      <text x="18" y="356" class="box-label">Loyalty / Promotion Engine</text>
+
+      <rect x="0" y="420" width="500" height="64" rx="10" fill="#ffffff" class="box" />
+      <text x="18" y="440" class="box-label">POS System (In-store terminal simulation)</text>
+    </g>
+  </g>
+
+  <!-- Connections: Draw arrows from Channels -> Sales Agent -->
+  <g stroke="#0b6fb6" stroke-width="2" fill="none" marker-end="url(#arrowhead)">
+    <!-- define arrowhead -->
+  </g>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0b6fb6" />
+    </marker>
+    <marker id="arrow-dark" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#07203a" />
+    </marker>
+  </defs>
+
+  <!-- Arrows from Channel boxes to Sales Agent -->
+  <!-- Mobile App Chatbot -->
+  <path d="M300 200 C 380 200, 500 200, 620 200" stroke="#0b6fb6" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+  <text x="460" y="188" class="arrow-label" text-anchor="middle">User Query</text>
+
+  <!-- Web Chat Widget -->
+  <path d="M300 276 C 380 276, 500 276, 620 276" stroke="#0b6fb6" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+  <text x="460" y="264" class="arrow-label" text-anchor="middle">User Query</text>
+
+  <!-- WhatsApp/Telegram -->
+  <path d="M620 200 C 740 200, 860 200, 820 200" stroke="#0b6fb6" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+  <text x="720" y="188" class="arrow-label" text-anchor="middle">User Query</text>
+
+  <!-- In-Store Kiosk -->
+  <path d="M620 276 C 740 276, 860 276, 820 276" stroke="#0b6fb6" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+  <text x="720" y="264" class="arrow-label" text-anchor="middle">User Query</text>
+
+  <!-- Arrow from Sales Agent to Worker Agents (Task Delegation) -->
+  <path d="M960 160 C 1100 160, 1100 320, 1080 360" stroke="#0b8f3c" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+  <text x="1040" y="160" class="arrow-label" text-anchor="middle">Task Delegation</text>
+
+  <!-- Multiple small arrows from Sales Agent to each Worker Agent -->
+  <path d="M900 220 L 740 420" stroke="#0b8f3c" stroke-width="2.5" fill="none" marker-end="url(#arrow)"></path>
+  <text x="816" y="310" class="arrow-label">Task Delegation</text>
+
+  <path d="M1020 220 L 1040 420" stroke="#0b8f3c" stroke-width="2.5" fill="none" marker-end="url(#arrow)"></path>
+  <text x="1032" y="310" class="arrow-label">Task Delegation</text>
+
+  <path d="M1180 220 L 1240 420" stroke="#0b8f3c" stroke-width="2.5" fill="none" marker-end="url(#arrow)"></path>
+  <text x="1212" y="310" class="arrow-label">Task Delegation</text>
+
+  <!-- Arrows from Worker Agents to Backend Systems (API Response) -->
+  <path d="M740 460 C 980 460, 1200 360, 1400 200" stroke="#8b5cf6" stroke-width="2.8" fill="none" marker-end="url(#arrow)"></path>
+  <text x="1070" y="370" class="arrow-label">API Response</text>
+
+  <path d="M940 460 C 1100 460, 1400 400, 1600 200" stroke="#8b5cf6" stroke-width="2.8" fill="none" marker-end="url(#arrow)"></path>
+  <text x="1270" y="370" class="arrow-label">API Response</text>
+
+  <!-- Dashed line Sales Agent <-> Customer Profile DB labeled Context & Preferences Memory -->
+  <path d="M940 180 L 1320 180" stroke="#07203a" stroke-width="2" stroke-dasharray="8,6" fill="none" marker-end="url(#arrow-dark)" marker-start="url(#arrow-dark)"></path>
+  <text x="1130" y="170" class="arrow-label" text-anchor="middle">Context & Preferences Memory</text>
+
+  <!-- Labels pointing to specific backend mappings (simple straight arrows) -->
+  <path d="M780 420 L 1620 220" stroke="#8b5cf6" stroke-width="2" fill="none" marker-end="url(#arrow)"></path>
+  <text x="1180" y="290" class="arrow-label">Catalog / Inventory API</text>
+
+  <!-- Legend and Notes -->
+  <rect x="40" y="620" width="1900" height="240" rx="10" ry="10" fill="#ffffff" stroke="#e2e8f0" />
+  <text x="64" y="650" class="legend-title">Legend & Notes</text>
+  <text x="64" y="680" class="small">• Light blue = Customer-facing channels (UI layer)</text>
+  <text x="64" y="700" class="small">• Soft yellow = Agentic AI Core (Orchestrator / Sales Agent)</text>
+  <text x="64" y="720" class="small">• Light green = Worker Agents (domain-specific autonomous agents)</text>
+  <text x="64" y="740" class="small">• Light purple = Data & Integration backend services</text>
+  <text x="64" y="760" class="small">• Dashed line = persistent context & preferences memory</text>
+  <text x="480" y="680" class="small">Arrow labels:</text>
+  <text x="480" y="700" class="small">User Query → (channel → Sales Agent), Task Delegation → (Sales Agent → Worker Agent), API Response → (Worker → Backend)</text>
+  <text x="480" y="720" class="small">Use the Sales Agent as the single conversational entry point which performs routing & context management.</text>
+
+  <!-- Footer note -->
+  <text x="1640" y="810" class="small" text-anchor="end">Design style: modern, flat, subtle gradients — readable at presentation sizes</text>
+
+</svg>
