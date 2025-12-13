@@ -1,54 +1,51 @@
-import React,{useState,useEffect,useContext} from 'react'
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Style from "./NavBar.module.css";
 import images from "../../assets/index";
-import {Model,TokenList} from "../index";
-import {SwapTokenContext} from "../../Context/SwapContext";
+import { Model, TokenList } from "../index";
+import { SwapTokenContext } from "../../Context/SwapContext";
 const NavBar = () => {
-  const {ethers,account,networkConnect,connectWallet,tokenData}=useContext(SwapTokenContext);
+  const { ethers, account, networkConnect, connectWallet, tokenData } =
+    useContext(SwapTokenContext);
   const menuItems = [
     {
-      name:"Swap",
-      link:"/",
+      name: "Swap",
+      link: "/",
     },
     {
-      name:"Tokens",
-      link:"/",
+      name: "Tokens",
+      link: "/",
     },
     {
-      name:"Pools",
-      link:"/",
-    }
+      name: "Pools",
+      link: "/",
+    },
   ];
-  const [openModel,setOpenModel]=useState(false);
-  const [openTokenBox,setOpenTokenBox]=useState(false);
+  const [openModel, setOpenModel] = useState(false);
+  const [openTokenBox, setOpenTokenBox] = useState(false);
   return (
     <div className={Style.NavBar}>
       <div className={Style.NavBar_box}>
         <div className={Style.NavBar_box_left}>
           <div className={Style.NavBar_box_left_img}>
-            <Image src={images.uniswap} alt="logo" width={50} height={50}/>
+            <Image src={images.uniswap} alt="logo" width={50} height={50} />
           </div>
           <div className={Style.NavBar_box_left_menu}>
-            {
-              menuItems.map((el,i)=>(
-                <Link
-                key={i+1}
-                href={{pathname:`${el.name}`,query:`${el.link}`}}
-                >
-                  <p className={Style.NavBar_box_left_menu_item}>{el.name}</p>
-                </Link>
-              ))
-            }
+            {menuItems.map((el, i) => (
+              <Link key={i + 1} href={{ pathname: `${el.name}` }}>
+                <p className={Style.NavBar_box_left_menu_item}>{el.name}</p>
+              </Link>
+            ))}
+            {/* ,query:`${el.link}` */}
           </div>
         </div>
         <div className={Style.NavBar_box_middle}>
           <div className={Style.NavBar_box_middle_search}>
             <div className={Style.NavBar_box_middle_search_img}>
-              <Image src={images.search} alt="search" width={20} height={20}/>
+              <Image src={images.search} alt="search" width={20} height={20} />
             </div>
-            <input type="text" placeholder="Search Tokens"/>
+            <input type="text" placeholder="Search Tokens" />
           </div>
         </div>
         <div className={Style.NavBar_box_right}>
@@ -58,24 +55,24 @@ const NavBar = () => {
             </div>
             <p>{networkConnect}</p>
           </div>
-          {account?(
-            <button onClick={()=> setOpenTokenBox(true)}>{account.slice(0,20)}</button>
-          ):(
-            <button onClick={()=> setOpenModel(true)}>Connect</button>
-          )
+          {account ? (
+            <button onClick={() => setOpenTokenBox(true)}>
+              {account.slice(0, 20)}
+            </button>
+          ) : (
+            <button onClick={() => setOpenModel(true)}>Connect</button>
+          )}
 
-          }
-          
           {openModel && (
-            <Model setOpenModel={setOpenModel} connectWallet={connectWallet}/>
+            <Model setOpenModel={setOpenModel} connectWallet={connectWallet} />
           )}
         </div>
       </div>
       {openTokenBox && (
-        <TokenList tokenData={tokenData} setOpenTokenBox={setOpenTokenBox}/>
+        <TokenList tokenData={tokenData} setOpenTokenBox={setOpenTokenBox} />
       )}
     </div>
   );
 };
 
-export default NavBar
+export default NavBar;
