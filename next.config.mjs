@@ -7,8 +7,8 @@ const nextConfig = {
     return [
       {
         source: "/swap",
-        destination:"/",
-        permanent: true, 
+        destination: "/",
+        permanent: true,
       },
     ];
   },
