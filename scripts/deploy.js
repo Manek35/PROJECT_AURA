@@ -44,7 +44,7 @@ async function main() {
     deploymentData.contracts.SingleSwapToken = singleSwapToken.address;
     console.log(`✅ SingleSwapToken deployed at ${singleSwapToken.address}`);
 
-    // Deploy SwapMultiHop
+    //Deploy SwapMultiHop
     console.log("Deploying SwapMultiHop...");
     const SwapMultiHop = await hre.ethers.getContractFactory("SwapMultiHop");
     const swapMultiHop = await SwapMultiHop.deploy();
