@@ -2,6 +2,7 @@
 
 # dependencies
 /cache
+scripts/deploymentdata.json
 Context/address.json
 /node_modules
 /.pnp
