@@ -1,0 +1,82 @@
+version: "3.8"
+
+services:
+  hardhat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hardhat_node
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app:cached
+      - node_deps:/usr/src/app/node_modules
+      - hardhat_cache:/usr/src/app/cache
+    ports:
+      - "8545:8545"
+    env_file:
+      - .env
+    command: >
+      bash -lc "
+        set -e;
+
+        echo '=== HARDHAT: cleaning old artifacts (if any) ===';
+        rm -rf artifacts cache || true;
+
+        echo '=== HARDHAT: installing deps ===';
+        npm ci;
+
+        echo '=== HARDHAT: starting node in background ===';
+        npx hardhat node --hostname 0.0.0.0 --fork https://eth-mainnet.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+          > /tmp/hardhat.log 2>&1 & echo \$! > /tmp/hardhat.pid;
+
+        echo '=== HARDHAT: waiting for RPC (127.0.0.1:8545) ===';
+        until curl -s http://127.0.0.1:8545 > /dev/null; do sleep 1; done;
+        echo '=== HARDHAT: RPC is up ===';
+
+        sleep 2;  # small safety pause
+
+        echo '=== HARDHAT: compiling ===';
+        npx hardhat compile;
+
+        echo '=== HARDHAT: running deploy ===';
+        npm run deploy;
+
+        echo '=== HARDHAT: running copyABI.js ===';
+        node copyABI.js || true;
+
+        echo '=== HARDHAT: deploy finished; streaming node logs ===';
+        tail -f /tmp/hardhat.log &
+        wait \$(cat /tmp/hardhat.pid);
+      "
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: next_dev
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app:cached
+      - node_deps:/usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - hardhat
+    command: >
+      bash -lc "
+        set -e;
+        echo '=== FRONTEND: installing deps ===';
+        npm ci;
+
+        echo '=== FRONTEND: waiting for Hardhat RPC (hardhat:8545) ===';
+        until curl -s http://hardhat:8545 > /dev/null; do sleep 1; done;
+        echo '=== FRONTEND: RPC reachable — starting Next dev ===';
+
+        npm run dev -- -H 0.0.0.0
+      "
+
+volumes:
+  node_deps:
+  hardhat_cache:
