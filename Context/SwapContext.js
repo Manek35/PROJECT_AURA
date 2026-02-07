@@ -79,7 +79,8 @@ export const SwapTokenContextProvider = ({ children }) => {
       //     console.log(i,el);
       // });
       const network = await provider.getNetwork();
-      setNetworkConnect(network.name);
+      // setNetworkConnect(network.name);
+      setNetworkConnect(network);
       console.log(network);
       const tokens = await Promise.all(
         addToken.map(async (address) => {
@@ -90,32 +91,38 @@ export const SwapTokenContextProvider = ({ children }) => {
           //const balance = ethers.utils.formatEther(userBalance);
           const symbol = await contract.symbol();
           const name = await contract.name();
-          
+
           // Determine Image
           let tokenImage = images.uniswap; // Default for custom tokens
-          
+
           // External Images
           const TOKEN_IMAGES = {
-            "0xdAC17F958D2ee523a2206206994597C13D831ec7": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png", // USDT
-            "0xB8c77482e45F1F44dE1745F52C74426C631bDD52": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xB8c77482e45F1F44dE1745F52C74426C631bDD52/logo.png", // BNB
-            "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png", // MATIC
-            "0x6B175474E89094C44Da98b954EedeAC495271d0F": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png", // DAI
-            "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE/logo.png", // SHIB
+            "0xdAC17F958D2ee523a2206206994597C13D831ec7":
+              "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png", // USDT
+            "0xB8c77482e45F1F44dE1745F52C74426C631bDD52":
+              "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xB8c77482e45F1F44dE1745F52C74426C631bDD52/logo.png", // BNB
+            "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0":
+              "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0/logo.png", // MATIC
+            "0x6B175474E89094C44Da98b954EedeAC495271d0F":
+              "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png", // DAI
+            "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE":
+              "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE/logo.png", // SHIB
             [AuraCoinAddress]: images.aura,
           };
 
-          if(TOKEN_IMAGES[address]){
-              tokenImage = TOKEN_IMAGES[address];
-          } else if(address === IWETHAddress){
-              tokenImage = images.etherlogo;
+          if (TOKEN_IMAGES[address]) {
+            tokenImage = TOKEN_IMAGES[address];
+          } else if (address === IWETHAddress) {
+            tokenImage = images.etherlogo;
           }
 
           return {
             name: name,
             symbol: symbol,
+            decimals: decimals,
             tokenBalance: ethers.utils.formatUnits(userBalance, decimals),
             tokenAddress: address,
-            img: tokenImage
+            img: tokenImage,
           };
         }),
       );

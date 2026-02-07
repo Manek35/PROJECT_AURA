@@ -53,7 +53,8 @@ const NavBar = () => {
             <div className={Style.NavBar_box_right_box_img}>
               <Image src={images.ether} alt="Network" height={30} width={30} />
             </div>
-            <p>{networkConnect}</p>
+            {/* <p>{networkConnect}</p> */}
+            <p>{networkConnect.name}</p>
           </div>
           {account ? (
             <button onClick={() => setOpenTokenBox(true)}>
