@@ -1,10 +1,11 @@
 import Web3Model from "web3modal";
 import UniswapV3pool from "@uniswap/v3-core/artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json";
 import {Contract,ethers} from "ethers";
-import {Pool} from "@uniswap/v3-sdk";
+import {Pool,Position} from "@uniswap/v3-sdk";
 import {Token} from "@uniswap/sdk-core";
 import ERC20 from "../Context/ERC20.json";
-
+import deploymentdata from "../scripts/deploymentdata.json";
+const artifacts={NonfungiblePositionManager:require("@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json")}
 async function getPoolData(poolContract,tokenAddess1,tokenAddess2){
     const [
         tickSpacing,
@@ -91,7 +92,8 @@ async function getPoolData(poolContract,tokenAddess1,tokenAddess2){
 export const getLiquidityData = async (
     poolAddress,
     token1Address,
-    token2Address
+    token2Address,
+    tokenId
 )=>{
     const web3modal = new Web3Model();
     const connection = await web3modal.connect();
@@ -102,6 +104,28 @@ export const getLiquidityData = async (
         token1Address,
         token2Address
     );
+    const positionManager = new Contract(
+        deploymentdata.nonfungiblePositionManager, 
+        artifacts.NonfungiblePositionManager.abi, 
+        provider
+    );
+    
+    const positionInfo = await positionManager.positions(tokenId);
+    
+    // 3. Create the Position Instance
+    // This uses the current pool price and the user's specific tick range
+    const userPosition = new Position({
+        pool: poolData.poolExample,
+        liquidity: positionInfo.liquidity.toString(),
+        tickLower: positionInfo.tickLower,
+        tickUpper: positionInfo.tickUpper,
+    });
+
+    // 4. Calculate Current Token Amounts
+    // amount0 and amount1 are CurrencyAmount objects representing 
+    // exactly what the user would get if they withdrew RIGHT NOW.
+    poolData.currentAmount0 = userPosition.amount0.toSignificant(6);
+    poolData.currentAmount1 = userPosition.amount1.toSignificant(6);
     return poolData;
 }
 

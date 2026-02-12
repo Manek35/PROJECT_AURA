@@ -31,6 +31,7 @@ import { swapUpdatePrice } from "../Utils/swapUpdatePrice";
 import { addLiquidityExternal } from "../Utils/addLiquidity";
 import { getLiquidityData } from "../Utils/checkLiquidity";
 import { connectingWithPoolContract } from "@/Utils/deployPool";
+import { removeLiquidity } from "@/Utils/removeLiquidity";
 import axios from "axios";
 
 export const SwapTokenContext = React.createContext();
@@ -135,15 +136,20 @@ export const SwapTokenContextProvider = ({ children }) => {
 
       const liquidityResults = await Promise.all(
         userLiquidity.map(async (el) => {
-          return await getLiquidityData(
+          const data=await getLiquidityData(
             el.poolAddress,
             el.tokenAddress0,
             el.tokenAddress1,
+            el.tokenId
           );
+          return {
+            ...data,
+            tokenId:el.tokenId.toString()
+          }
         }),
       );
       setGetAllLiquidity(liquidityResults);
-
+      console.log(liquidityResults.length)
       const URL =
         "https://gateway.thegraph.com/api/5f704218070c5797b1928dd757cd63a0/subgraphs/id/5zvR82QoaXYFyDEKLZ9t6v9adgnptxYpKpSbxtgVENFV";
 
@@ -246,12 +252,26 @@ export const SwapTokenContextProvider = ({ children }) => {
         poolAddress,
         tokenAddress0,
         tokenAddress1,
+        info.tokenId
       );
     } catch (error) {
       console.log(error);
     }
   };
-
+  const removeLiquidityAndUpdateUserdata=async (tokenId)=>
+  {
+    try{
+      const userStorageData = await connectingWithUserStorageContract();
+      const userLiquidity=await userStorageData.removeTransaction(tokenId);
+      console.log("userdata updated");
+      const data=removeLiquidity(tokenId);
+      
+      
+    }
+    catch(error){
+      console.log(error);
+    }
+  };
   const singleSwapToken = async ({ token1, token2, swapAmount }) => {
     console.log(
       token1.tokenAddress.tokenAddress,
@@ -305,6 +325,7 @@ export const SwapTokenContextProvider = ({ children }) => {
         getPrice,
         swapUpdatePrice,
         createLiquidityAndPool,
+        removeLiquidityAndUpdateUserdata,
         getAllLiquidity,
         account,
         weth9,

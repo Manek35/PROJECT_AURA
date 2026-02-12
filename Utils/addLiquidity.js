@@ -176,6 +176,8 @@ export const addLiquidityExternal = async (
                          .connect(signer)
                          .mint(params,{gasLimit:"3000000"});
           const receipt = await tx.wait();
-          console.log("transsction complete");
-          return receipt;
+          const event = receipt.events.find(e => e.event === 'IncreaseLiquidity');
+          const tokenId = event.args.tokenId.toString();
+          console.log("transsction complete with tokenId:",tokenId);
+          return {receipt:receipt,tokenId:tokenId};
 }

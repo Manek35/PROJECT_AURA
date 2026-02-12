@@ -69,6 +69,22 @@
   line-height: 0;
 }
 
+.PoolConnect_box_liquidity_list_info span,.PoolConnect_box_liquidity_list_info small{
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.PoolConnect_box_liquidity_list_button button{
+  background-color: #cff80b;
+  border: 0;
+  outline: none;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
 .mark{
   background-color: #cff80b;
   color: #1e1e1e;

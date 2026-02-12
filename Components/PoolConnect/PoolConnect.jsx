@@ -5,7 +5,7 @@ import Image from "next/image";
 import Style from "./PoolConnect.module.css";
 import images from "../../assets";
 
-const PoolConnect = ({setClosePool,getAllLiquidity,account}) => {
+const PoolConnect = ({setClosePool,getAllLiquidity,removeLiquidityAndUpdateUserdata,account}) => {
   console.log(getAllLiquidity);
   return (
     <div className={Style.PoolConnect}>
@@ -36,26 +36,31 @@ const PoolConnect = ({setClosePool,getAllLiquidity,account}) => {
             <small className={Style.mark}>
               {el.poolExample.token1.name}
             </small>{" "}
-            <span className={ Style.paragraph, Style.hide }>
+            {/* <span className={ Style.paragraph, Style.hide }>
               {el.poolExample.token0.name}/{el.poolExample.token1.name}
-            </span>{" "}
-            <span className={Style.paragraph}>
+            </span>{" "} */}
+            <small className={Style.mark}>
               {el.poolExample.fee}
-            </span>{" "}
+            </small>{" "}
           </p>
           <p className={Style.highligth}>In Range</p>
         </div>
         <div className={Style.PoolConnect_box_liquidity_list_info}>
           <p>
-          <small>Min: 0.999</small>{" "}
+          <small>Your Current Position</small>{" "}
           <span>
-            {el.poolExample.token0.name} per {" "} {el.poolExample.token1.name}
+            {el.poolExample.token0.name} : {" "} {el.currentAmount0}
           </span>
-          {""}<span>--------</span><small>Max: 1.000</small>
-          <span className={Style.hide}>
+          <span>
+            {el.poolExample.token1.name} : {" "} {el.currentAmount1}
+          </span>
+          {/* <span className={Style.hide}>
             {el.poolExample.token0.name} per {""} {el.poolExample.token1.name}
-          </span>
+          </span> */}
           </p>
+        </div>
+        <div className={Style.PoolConnect_box_liquidity_list_button}>
+          <button onClick={()=>removeLiquidityAndUpdateUserdata(el.tokenId)}>Remove Liquidity</button>
         </div>
       </div>
     ))}
