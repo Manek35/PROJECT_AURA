@@ -93,11 +93,10 @@ export const getLiquidityData = async (
     poolAddress,
     token1Address,
     token2Address,
-    tokenId
+    tokenId,
+    provider
 )=>{
-    const web3modal = new Web3Model();
-    const connection = await web3modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    
     const poolContract = new Contract(poolAddress,UniswapV3pool.abi,provider);
     const poolData = await getPoolData(
         poolContract,
@@ -124,8 +123,8 @@ export const getLiquidityData = async (
     // 4. Calculate Current Token Amounts
     // amount0 and amount1 are CurrencyAmount objects representing 
     // exactly what the user would get if they withdrew RIGHT NOW.
-    poolData.currentAmount0 = userPosition.amount0.toSignificant(6);
-    poolData.currentAmount1 = userPosition.amount1.toSignificant(6);
+    poolData.currentAmount0 = userPosition.amount0.toSignificant(6)+ethers.utils.formatUnits(positionInfo.tokensOwed0,poolData.poolExample.token0.decimals);
+    poolData.currentAmount1 = userPosition.amount1.toSignificant(6)+ethers.utils.formatUnits(positionInfo.tokensOwed1,poolData.poolExample.token1.decimals);
     return poolData;
 }
 

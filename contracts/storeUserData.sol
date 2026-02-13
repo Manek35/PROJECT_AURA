@@ -8,14 +8,15 @@ contract UserStorageData{
         address poolAddress;
         address tokenAddress0;
         address tokenAddress1;
+        address liquidityProvider;
         uint256 tokenId;
     }
 
     TransactionStruct[] transactions;
 
-    function addToBlockchain(address poolAddress,address tokenAddress0,address tokenAddress1,uint256 tokenId) public
+    function addToBlockchain(address poolAddress,address tokenAddress0,address tokenAddress1,address liquidityProvider,uint256 tokenId) public
     {
-        transactions.push(TransactionStruct(msg.sender,poolAddress,tokenAddress0,tokenAddress1,tokenId));
+        transactions.push(TransactionStruct(msg.sender,poolAddress,tokenAddress0,tokenAddress1,liquidityProvider,tokenId));
     }
 
     function removeTransaction(uint256 _tokenId) public {
@@ -29,8 +30,24 @@ contract UserStorageData{
         }
     }    
 
-    function getAllTransactions()public view returns(TransactionStruct[] memory){
-        return transactions;
+    function getAllTransactions(address signer)public view returns(TransactionStruct[] memory){
+        uint256 count = 0;
+        uint256 totalLength = transactions.length;
+        for (uint256 i = 0; i < totalLength; i++) {
+            if (transactions[i].liquidityProvider == signer) {
+                count++;
+            }
+        }
+        TransactionStruct[] memory signerTransactions = new TransactionStruct[](count);
+        uint256 index = 0;
+        for (uint256 i = 0; i < totalLength; i++) {
+            if (transactions[i].liquidityProvider == signer) {
+                signerTransactions[index] = transactions[i];
+                index++;
+            }
+        }
+
+        return signerTransactions;
     }
 }
 

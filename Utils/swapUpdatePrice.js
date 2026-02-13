@@ -28,7 +28,7 @@ const deploymentdata = require("../scripts/deploymentdata.json");
 const QuoterV2 = require("@uniswap/v3-periphery/artifacts/contracts/lens/QuoterV2.sol/QuoterV2.json");
 const quoterAddress = deploymentdata.quoter;
 const ethers = require("ethers");
-const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
+//const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
 export const swapUpdatePrice = async (
   inputAmount,
   //     slippageAmount,
@@ -42,6 +42,7 @@ export const swapUpdatePrice = async (
   tokenOne,
   tokenTwo,
   fee,
+  provider
 ) => {
   const amountIn = ethers.utils.parseUnits(
     inputAmount.toString(),

@@ -80,13 +80,9 @@ export const connectingWithAuraCoin=async()=>
 
 export const fetchTokenContract =(singnerOrProvider,tokenAddress)=> new ethers.Contract(tokenAddress,IWETHABI,singnerOrProvider);
 
-export const connectingWithToken=async(tokenAddress)=>
+export const connectingWithToken=async(tokenAddress,signer)=>
 {
     try {
-        const web3modal=new Web3Model();
-        const connection =await web3modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer=provider.getSigner();
         const contract=fetchTokenContract(signer,tokenAddress);
         return contract;
     } catch (error) {
@@ -130,13 +126,9 @@ export const connectingWithDAI=async()=>
 
 export const fetchSingleSwapTokenContract =(singnerOrProvider)=> new ethers.Contract(SingleSwapTokenAddress,SingleSwapTokenABI,singnerOrProvider);
 
-export const connectingWithSingleSwapToken=async()=>
+export const connectingWithSingleSwapToken=async(signer)=>
 {
     try {
-        const web3modal=new Web3Model();
-        const connection =await web3modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer=provider.getSigner();
         const contract=fetchSingleSwapTokenContract(signer);
         return contract;
     } catch (error) {
@@ -163,14 +155,9 @@ export const connectingWithSwapMultiHop=async()=>
 
 export const fetchUserStorageDataContract =(singnerOrProvider)=> new ethers.Contract(UserStorageDataAddress,UserStorageDataABI,singnerOrProvider);
 
-export const connectingWithUserStorageContract=async()=>
+export const connectingWithUserStorageContract=async(signer)=>
 {
     try {
-        console.log("entered");
-        const web3modal=new Web3Model();
-        const connection =await web3modal.connect();
-        const provider = new ethers.providers.Web3Provider(connection);
-        const signer=provider.getSigner();
         const contract=fetchUserStorageDataContract(signer);
         return contract;
     } catch (error) {

@@ -1,0 +1,171 @@
+# Uniswap V3 Clone - Project Documentation
+
+## 1. Project Overview
+This project is a decentralized exchange (DEX) clone based on **Uniswap V3**, built using **Next.js** for the frontend and **Hardhat** for Ethereum smart contract development. It allows users to swap ERC20 tokens, add/remove liquidity, and connect their wallets via Web3Modal.
+
+**Core Technologies:**
+*   **Frontend**: Next.js (React), Ethers.js, Web3Modal, CSS Modules.
+*   **Blockchain**: Hardhat, Solidity (v0.7.6), Uniswap V3 Core/Periphery SDKs.
+*   **Languages**: JavaScript, Solidity.
+
+---
+
+## 2. System Architecture
+
+The application is structured into three main layers:
+
+### 2.1. Smart Contracts Layer (`/contracts`, `/scripts`)
+*   **Custom Tokens**: `BooCoin` and `AuraCoin` serve as test ERC20 tokens.
+*   **Swap Logic**: 
+    *   `SingleSwapToken.sol`: Handles single-hop token swaps (e.g., Token A -> Token B).
+    *   `SwapMultiHop.sol`: Handles multi-hop swaps (e.g., Token A -> Token B -> Token C).
+*   **Liquidity Management**: 
+    *   `Liqudity.sol`: (Experimental) Manages liquidity provision using the Uniswap V3 `NonfungiblePositionManager`.
+*   **User Data**: `UserStorageData.sol` stores transaction history and user-specific data on-chain.
+*   **Deployment**: `scripts/deploy.js` deploys these contracts and auto-updates `Context/address.json` with the new addresses.
+
+### 2.2. Interface Layer (`/Utils`, `/Context`)
+*   **Connections (`Utils/appFeatures.js`)**: Contains helper functions to connect to deployed contracts using `ethers.js` and `web3modal`.
+*   **Configuration (`Context/constants.js`)**: Centralizes contract addresses and ABIs. It dynamically loads deployed addresses from `Context/address.json`.
+*   **State Management (`Context/SwapContext.js`)**: A React Context provider that:
+    *   Manages global state (user account, balances, token data).
+    *   Exposes core functions (`connectWallet`, `singleSwapToken`, `createLiquidityAndPool`) to UI components.
+
+### 2.3. Presentation Layer (`/pages`, `/Components`)
+*   **Pages**: Next.js pages for the main interface.
+*   **Components**: Reusable UI elements:
+    *   `HeroSection`: Main swap interface.
+    *   `NavBar`: Connect wallet button and navigation.
+    *   `SearchToken`: Token selection modal.
+    *   `TokenList`: Displays list of available tokens.
+
+---
+
+## 3. Workflow & Logic
+
+### 3.1. Wallet Connection
+1.  User clicks "Connect" in `NavBar`.
+2.  `connectWallet` in `appFeatures.js` triggers `Web3Modal`.
+3.  User selects a provider (e.g., MetaMask).
+4.  App retrieves the signer and updates the `account` state in `SwapContext`.
+
+### 3.2. Token Swap (Single Hop)
+1.  User selects input/output tokens and amount in `HeroSection`.
+2.  `SwapContext` calls `singleSwapToken`.
+3.  App approves the `SingleSwapToken` contract to spend users tokens.
+4.  Contract calls Uniswap V3 `SwapRouter` to execute the trade.
+5.  UI updates balances upon transaction confirmation.
+
+### 3.3. Adding Liquidity
+1.  User navigates to the Liquidity section.
+2.  `createLiquidityAndPool` function is triggered.
+3.  Interacts with `Liqudity.sol` (or direct Uniswap NFT Manager) to mint a new liquidity position.
+4.  Transaction details are stored via `UserStorageData.sol`.
+
+---
+
+## 4. Technical Specifications
+
+### Key Dependencies
+*   `@uniswap/v3-sdk`: Core logic for Uniswap V3 interactions.
+*   `@uniswap/smart-order-router`: Routing logic for swaps.
+*   `hardhat`: Development environment.
+*   `ethers` (v5): Blockchain interaction library.
+*   `web3modal`: Wallet connection compatible with multiple providers.
+
+### Directory Structure
+```
+/
+├── contracts/          # Solidity smart contracts
+├── scripts/            # Deployment and helper scripts
+├── Context/            # React Context & Contract Constants
+│   ├── SwapContext.js  # Main state logic
+│   ├── constants.js    # Address & ABI exports
+│   └── address.json    # Deployed addresses (Auto-generated)
+├── Utils/              # Ethers.js helper functions
+├── Components/         # React UI Components
+├── pages/              # Next.js Routes
+└── hardhat.config.js   # Hardhat configuration
+```
+
+---
+
+## 5. Setup & Deployment Guide
+
+### Prerequisites
+*   Node.js (v16+ recommended)
+*   NPM or Yarn
+*   MetaMask installed in browser
+
+### Step 1: Installation
+```bash
+npm install
+```
+
+### Step 2: Local Blockchain Setup
+Start a local Hardhat node to simulate the Ethereum blockchain:
+```bash
+npx hardhat node
+```
+
+### Step 3: Deploy Contracts
+In a new terminal window, run the deployment script. This will compile contracts and deploy them to your local node:
+```bash
+npx hardhat run scripts/deploy.js --network localhost
+```
+*Note: This script will automatically update `Context/address.json` with the new contract addresses.*
+
+### Step 4: Run Frontend
+Start the Next.js development server:
+```bash
+npm run dev
+```
+Access the application at `http://localhost:3000`.
+
+### Troubleshooting
+*   **"Nonce too high"**: Reset your MetaMask account transaction history (Settings > Advanced > Clear Activity Tab Data) if you restart the hardhat node.
+*   **Missing Dependencies**: Ensure all `@uniswap` packages are installed.
+
+---
+
+## 6. Business Logic & Mathematical Model
+
+### 6.1. Token Swap Mechanics & Calculation
+**How much does a user get?**
+When a user swaps Token A for Token B, the output amount is determined by the **Constant Product Formula** ($x \cdot y = k$) within specific price ranges (ticks).
+
+1.  **Fee Deduction**: A fee (e.g., 0.3% or `3000` tier) is subtracted from the input amount.
+    *   $Amount_{in\_net} = Amount_{in} \times (1 - FeeRate)$
+    *   *Example*: If swapping 1000 Tokens with a 0.3% fee, 997 Tokens are used for the swap, and 3 Tokens go to Liquidity Providers (LPs).
+
+2.  **Price Impact**: The swap moves the price along the curve. The larger the trade relative to the pool's liquidity ($L$), the worse the execution price (slippage).
+    *   **Math**: The new price ($P_{new}$) is calculated such that the liquidity ($L$) remains sufficient to cover the trade within the active tick.
+    *   $\Delta y = \Delta x \cdot \frac{L^2}{L + \Delta x \sqrt{P}}$ (Simplified representation for a single tick).
+
+3.  **Code implementation**: 
+    *   In `SwapContext.js`, the `singleSwapToken` function passes `3000` (0.3%) as the fee tier.
+    *   This ensures LPs earn a standard fee for this pool category.
+
+### 6.2. Liquidity Provision (LP) Strategy
+**How do LPs add liquidity?**
+In Uniswap V3, LPs usually select a specific price range (Concentrated Liquidity). However, this project's `Liqudity.sol` implementation simplifies this:
+
+*   **Full Range Provision**: The contract hardcodes `tickLower` to `MIN_TICK` and `tickUpper` to `MAX_TICK` (Lines 61-62 in `Liqudity.sol`).
+*   **Implication**: This mimics Uniswap V2 behavior. The capital is spread across all possible prices (from 0 to infinity). This is less capital-efficient than concentrated liquidity but safer (no "impermanent loss" from price going out of range, though standard IL still applies).
+
+### 6.3. LP Profit Model
+**How do they earn?**
+Liquidity Providers earn trading fees proportional to their share of the pool's active liquidity.
+
+*   **Formula**: $FeeEarned = TradeVolume \times FeeTier \times \frac{L_{user}}{L_{total}}$
+*   The fees are not automatically reinvested (compounded). They accumulate in a separate balance (fee growth global0/1) and must be manually collected via the `collectAllFees` function in `Liqudity.sol`.
+
+### 6.4. Technical Summary of Operations
+1.  **Minting Position**:
+    *   User supplies Token A and Token B.
+    *   Contract calls `nonfungiblePositionManager.mint()`.
+    *   User receives an NFT representing their position ID.
+2.  **Swapping**:
+    *   User approves SwapRouter.
+    *   Router iterates through initialized ticks, swapping tokens and accruing fees to the active liquidity range.
+

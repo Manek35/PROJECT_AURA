@@ -1,5 +1,4 @@
 const axios= require("axios");
-const ETHERSCAN_API_KEY="XNU2Q246329NTTV11STPTMHPKJS5GXE5VE";
 //require("dotenv").config();
 
 const ERC20_ABI = [
@@ -33,7 +32,7 @@ const ERC20_ABI = [
 ];
 
 exports.getAbi = async(address)=>{
-    const url=`https://api.etherscan.io/v2/api?chainid=1&module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`;
+    const url=`https://api.etherscan.io/v2/api?chainid=1&module=contract&action=getabi&address=${address}&apikey=${process.env.ETHERSCAN_API_KEY}`;
     try {
         const res = await axios.get(url);
         // Check for Etherscan error status or if result is not a valid string for JSON.parse

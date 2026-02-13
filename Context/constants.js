@@ -10,7 +10,7 @@ import uniswap from "../scripts/deploymentdata.json";
 
 // Token addresses
 export const DAIAddress = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
-export const IWETHAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+export const IWETHAddress = uniswap.weth;//"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
 // Contract addresses from deployment
 export const BooCoinAddress = deployment.contracts.BooCoin;

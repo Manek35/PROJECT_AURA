@@ -8,11 +8,7 @@ const artifacts = {
   NonfungiblePositionManager: require("@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json"),
 };
 
-export const removeLiquidity = async (tokenId) => {
-  const web3modal = new Web3Model();
-  const connection = await web3modal.connect();
-  const provider = new ethers.providers.Web3Provider(connection);
-  const signer = provider.getSigner();
+export const removeLiquidity = async (tokenId,signer) => {
   const accountAddress = await signer.getAddress();
 
   const nonfungiblePositionManager = new Contract(

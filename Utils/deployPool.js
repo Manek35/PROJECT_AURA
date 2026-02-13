@@ -45,12 +45,10 @@ export const connectingWithPoolContract = async (
     address2,
     fee,
     tokenfee1,
-    tokenfee2
+    tokenfee2,
+    signer
 )=>{
-    const web3Model = new Web3Model();
-    const connection = await web3Model.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    
     const [token0, token1] =
     address1.toLowerCase() < address2.toLowerCase()
       ? [address1, address2]

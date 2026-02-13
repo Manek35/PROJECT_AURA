@@ -12,7 +12,9 @@ async function main() {
 
     PopUp = await ethers.getContractFactory("PopUp");
     popUp = await PopUp.deploy();
-
+    // await shoaib.transfer(signer2.address,ethers.utils.parseUnits("300000", 18));
+    // await popUp.transfer(signer2.address,ethers.utils.parseUnits("400000", 18));
+    //console.log(owner.address,signer2.address);
     console.log("shoaib address=",`${shoaib.address}`);
     console.log("rayyan address=",`${rayyan.address}`);
     console.log("popUp address=",`${popUp.address}`);

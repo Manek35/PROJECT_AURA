@@ -2,9 +2,9 @@
 
 # dependencies
 /cache
-scripts/deploymentdata.json
-scripts/tokendata.json
-Context/address.json
+# scripts/deploymentdata.json
+# scripts/tokendata.json
+# Context/address.json
 /node_modules
 /.pnp
 .pnp.*

@@ -18,7 +18,7 @@ const HeroSection = ({}) => {
     dai,
     ether,
     tokenData,
-    getPrice,
+    provider,
     swapUpdatePrice,
     networkConnect,
   } = useContext(SwapTokenContext);
@@ -71,6 +71,7 @@ const HeroSection = ({}) => {
       tokenTwo,
       //networkConnect
       3000,
+      provider
     );
     console.log(data);
     // setTokenSwapOutPut(data[1]);

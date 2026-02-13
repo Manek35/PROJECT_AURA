@@ -1,0 +1,12 @@
+{
+  "network": "sepolia",
+  "deployer": "0x6569D45286F9F75C3f0087E760f516272D01d9e7",
+  "timestamp": "2026-02-12T20:56:26.341Z",
+  "contracts": {
+    "BooCoin": "0x876B9F5B652165D58b135199E55204c502546B82",
+    "AuraCoin": "0x5202D6090b1b3EBbb316dC0B7AF769dbbFC53a54",
+    "SingleSwapToken": "0x25a527cf4abF0EcB28964647696f1aB92f1b5733",
+    "SwapMultiHop": "0xD179E7D18Ac7E322bb229eC0DFC70551196EAe82",
+    "UserStorageData": "0x29CeB2488cDAbcc03a7a15F53F1d63064A36d9D0"
+  }
+}
