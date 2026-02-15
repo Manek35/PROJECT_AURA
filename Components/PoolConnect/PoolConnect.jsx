@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
 // INTERNAL IMPORT
 import Style from "./PoolConnect.module.css";
 import images from "../../assets";
 
-const PoolConnect = ({setClosePool,getAllLiquidity,removeLiquidityAndUpdateUserdata,account}) => {
+const PoolConnect = ({setClosePool,getAllLiquidity,removeLiquidityAndUpdateUserdata,account, collectFees}) => {
+  const [loading, setLoading] = useState(null); // Store tokenId being processed
+
+  const handleRemoveLiquidity = async (tokenId) => {
+    setLoading(tokenId);
+    try {
+      await removeLiquidityAndUpdateUserdata(tokenId);
+      alert("Liquidity removed successfully!");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to remove liquidity. See console for details.");
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const handleCollectFees = async (tokenId) => {
+    setLoading(tokenId);
+    try {
+        await collectFees(tokenId);
+        alert("Fees collected successfully!");
+    } catch (error) {
+        console.error(error);
+        alert("Failed to collect fees. See console.");
+    } finally {
+        setLoading(null);
+    }
+  };
+
   console.log(getAllLiquidity);
   return (
     <div className={Style.PoolConnect}>
@@ -27,7 +55,7 @@ const PoolConnect = ({setClosePool,getAllLiquidity,removeLiquidityAndUpdateUserd
       <p>Your Position {getAllLiquidity.length}</p>
     </div>
     {getAllLiquidity.map((el,i)=>(
-      <div className={Style.PoolConnect_box_liquidity_box}>
+      <div className={Style.PoolConnect_box_liquidity_box} key={i}>
         <div className={Style.PoolConnect_box_liquidity_list}>
           <p>
             <small className={Style.mark}>
@@ -60,7 +88,21 @@ const PoolConnect = ({setClosePool,getAllLiquidity,removeLiquidityAndUpdateUserd
           </p>
         </div>
         <div className={Style.PoolConnect_box_liquidity_list_button}>
-          <button onClick={()=>removeLiquidityAndUpdateUserdata(el.tokenId)}>Remove Liquidity</button>
+          {el.liquidity == "0" ? (
+             <button
+                onClick={() => handleCollectFees(el.tokenId)}
+                disabled={loading === el.tokenId}
+             >
+                {loading === el.tokenId ? "Processing..." : "Claim Fees"}
+             </button>
+          ) : (
+            <button 
+                onClick={() => handleRemoveLiquidity(el.tokenId)}
+                disabled={loading === el.tokenId}
+            >
+                {loading === el.tokenId ? "Processing..." : "Remove Liquidity"}
+            </button>
+          )}
         </div>
       </div>
     ))}

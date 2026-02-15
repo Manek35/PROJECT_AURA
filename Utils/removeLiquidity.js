@@ -59,3 +59,26 @@ export const removeLiquidity = async (tokenId,signer) => {
   console.log("Liquidity removed and assets retrieved!");
   return receipt;
 };
+
+export const collectFees = async (tokenId, signer) => {
+  const accountAddress = await signer.getAddress();
+  
+  const nonfungiblePositionManager = new Contract(
+    positionManagerAddress,
+    artifacts.NonfungiblePositionManager.abi,
+    signer
+  );
+
+  const collectParams = {
+    tokenId: tokenId,
+    recipient: accountAddress,
+    amount0Max: ethers.BigNumber.from(2).pow(128).sub(1), // Max uint128
+    amount1Max: ethers.BigNumber.from(2).pow(128).sub(1),
+  };
+
+  const collectTx = await nonfungiblePositionManager.collect(collectParams, {
+    gasLimit: 500000,
+  });
+  const receipt = await collectTx.wait();
+  return receipt;
+};

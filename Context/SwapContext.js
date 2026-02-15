@@ -4,6 +4,7 @@ import { ethers, BigNumber } from "ethers";
 import Web3Model from "web3modal";
 import { Token, CurrencyAmount, TradeType, Percent } from "@uniswap/sdk-core";
 
+// import { connectingWithUserStorageContract } from "../Utils/appFeatures"; // We might not need this for reading anymore, but keeping for writing
 import {
   checkIfWalletConnected,
   connectWallet,
@@ -31,8 +32,10 @@ import { swapUpdatePrice } from "../Utils/swapUpdatePrice";
 import { addLiquidityExternal } from "../Utils/addLiquidity";
 import { getLiquidityData } from "../Utils/checkLiquidity";
 import { connectingWithPoolContract } from "@/Utils/deployPool";
-import { removeLiquidity } from "@/Utils/removeLiquidity";
+import { removeLiquidity, collectFees } from "@/Utils/removeLiquidity";
 import axios from "axios";
+
+import deploymentdata from "../scripts/deploymentdata.json";
 
 export const SwapTokenContext = React.createContext();
 export const SwapTokenContextProvider = ({ children }) => {
@@ -153,26 +156,82 @@ export const SwapTokenContextProvider = ({ children }) => {
 
       setTokenData(tokens);
 
-      const userStorageData = await connectingWithUserStorageContract(Signer);
-      const userLiquidity = await userStorageData.getAllTransactions(userAccount);
-      console.log("userstorage", userLiquidity);
-
-      const liquidityResults = await Promise.all(
-        userLiquidity.map(async (el) => {
-            const data = await getLiquidityData(
-              el.poolAddress,
-              el.tokenAddress0,
-              el.tokenAddress1,
-              el.tokenId,
-              Provider
-            );
-            return {
-              ...data,
-              tokenId: el.tokenId.toString()
-            };
-          })
+      // 1. Get position manager contract
+      const positionManager = new ethers.Contract(
+        deploymentdata.nonfungiblePositionManager,
+        require("@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json").abi,
+        Provider
       );
-      setGetAllLiquidity(liquidityResults);
+
+      // 2. Get number of NFTs owned by user
+      const nftBalance = await positionManager.balanceOf(userAccount);
+      console.log("User has NFTs:", nftBalance.toString());
+
+      // 3. fetch all token IDs
+      const tokenIds = [];
+      for (let i = 0; i < nftBalance.toNumber(); i++) {
+        const tokenId = await positionManager.tokenOfOwnerByIndex(userAccount, i);
+        tokenIds.push(tokenId);
+      }
+
+      // 4. Fetch data for each token ID
+      const liquidityResults = await Promise.all(
+        tokenIds.map(async (tokenId) => {
+          // We need to fetch basic info like token addresses from the position itself
+          const positionInfo = await positionManager.positions(tokenId);
+          
+          if (positionInfo.liquidity.eq(0)) {
+             const hasDust = positionInfo.tokensOwed0.gt(0) || positionInfo.tokensOwed1.gt(0);
+             if (!hasDust) {
+               return null;
+             }
+          }
+
+           // Re-use logic from checkLiquidity, but we might need to adjust arguments since we don't have el.poolAddress handy immediately
+           // Actually `getLiquidityData` in checkLiquidity takes (poolAddress, token1, token2, tokenId, provider)
+           // We need to find poolAddress etc from the position info.
+           // BUT `getLiquidityData` calculates poolAddress internally if we only had the tokens and fee?
+           // No, `getLiquidityData` signature is: (poolAddress, token1Address, token2Address, tokenId, provider)
+           
+           // We need to derive pool address. Factory + tokens + fee.
+           // or we can just update `getLiquidityData` to work with just TokenID? 
+           // Let's rely on the fact that `UserStorage` is broken and we need to do it the hard way or 
+           // use a helper. 
+           
+           // Let's modify `getLiquidityData` in Utils/checkLiquidity.js to be smarter, 
+           // OR calculate it here. 
+           
+           // To calculate Pool Address:
+           // We can use the factory.getPool(token0, token1, fee)
+           
+           const factoryAddress = deploymentdata.factory;
+           const factoryContract = new ethers.Contract(
+              factoryAddress,
+              require("@uniswap/v3-core/artifacts/contracts/UniswapV3Factory.sol/UniswapV3Factory.json").abi,
+              Provider
+           );
+           
+           const token0 = positionInfo.token0;
+           const token1 = positionInfo.token1;
+           const fee = positionInfo.fee;
+           
+           const poolAddress = await factoryContract.getPool(token0, token1, fee);
+           
+           const data = await getLiquidityData(
+             poolAddress,
+             token0,
+             token1,
+             tokenId,
+             Provider
+           );
+           
+           return {
+               ...data,
+               tokenId: tokenId.toString()
+           }
+        })
+      );
+      setGetAllLiquidity(liquidityResults.filter(el => el !== null));
       console.log(liquidityResults.length)
       const URL =
         "https://gateway.thegraph.com/api/5f704218070c5797b1928dd757cd63a0/subgraphs/id/5zvR82QoaXYFyDEKLZ9t6v9adgnptxYpKpSbxtgVENFV";
@@ -287,20 +346,36 @@ export const SwapTokenContextProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const removeLiquidityAndUpdateUserdata=async (tokenId)=>
-  {
-    try{
+  const removeLiquidityAndUpdateUserdata = async (tokenId) => {
+    try {
+      // 1. Perform Blockchain Transaction First
+      const receipt = await removeLiquidity(tokenId, signer);
+      
+      // 2. Then Update User Storage (if needed for other reasons, though we now fetch from chain)
       const userStorageData = await connectingWithUserStorageContract(signer);
-      const userLiquidity=await userStorageData.removeTransaction(tokenId);
+      await userStorageData.removeTransaction(tokenId);
       console.log("userdata updated");
-      const data=removeLiquidity(tokenId,signer);
       
-      
-    }
-    catch(error){
+      await fetchData(); // Refresh balances
+      return receipt;
+    } catch (error) {
       console.log(error);
+      throw error;
     }
   };
+  
+  const collectFeesForUser = async (tokenId) => {
+    try {
+        const receipt = await collectFees(tokenId, signer);
+        console.log("Fees collected");
+        await fetchData(); // Refresh balances
+        return receipt;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+  };
+
   const singleSwapToken = async ({ token1, token2, swapAmount }) => {
     console.log(
       token1.tokenAddress.tokenAddress,
@@ -364,7 +439,9 @@ export const SwapTokenContextProvider = ({ children }) => {
         tokenData,
         topTokenList,
         router,
-        provider
+        router,
+        provider,
+        collectFees: collectFeesForUser
       }}
     >
       {children}

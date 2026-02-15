@@ -123,8 +123,13 @@ export const getLiquidityData = async (
     // 4. Calculate Current Token Amounts
     // amount0 and amount1 are CurrencyAmount objects representing 
     // exactly what the user would get if they withdrew RIGHT NOW.
-    poolData.currentAmount0 = userPosition.amount0.toSignificant(6)+ethers.utils.formatUnits(positionInfo.tokensOwed0,poolData.poolExample.token0.decimals);
-    poolData.currentAmount1 = userPosition.amount1.toSignificant(6)+ethers.utils.formatUnits(positionInfo.tokensOwed1,poolData.poolExample.token1.decimals);
+    const amount0Principal = parseFloat(userPosition.amount0.toFixed(6));
+    const amount0Fees = parseFloat(ethers.utils.formatUnits(positionInfo.tokensOwed0, poolData.poolExample.token0.decimals));
+    poolData.currentAmount0 = (amount0Principal + amount0Fees).toFixed(6);
+
+    const amount1Principal = parseFloat(userPosition.amount1.toFixed(6));
+    const amount1Fees = parseFloat(ethers.utils.formatUnits(positionInfo.tokensOwed1, poolData.poolExample.token1.decimals));
+    poolData.currentAmount1 = (amount1Principal + amount1Fees).toFixed(6);
     return poolData;
 }
 

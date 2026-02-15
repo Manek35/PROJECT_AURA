@@ -17,7 +17,7 @@ const TokenList = ({tokenData,setOpenTokenBox}) => {
         <div className={Style.TokenList_box_info}>
           <p className={Style.TokenList_box_info_symbol}>{el.symbol}</p>
           <p>
-            <span>{el.tokenBalance.slice(0,9)}</span>{el.name}
+            <span>{parseFloat(el.tokenBalance).toFixed(2)}</span>{el.name}
           </p>
         </div>
       ))}

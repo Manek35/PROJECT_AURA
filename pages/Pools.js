@@ -25,14 +25,14 @@ const Pool = () => {
 //       </div>
 //     );
 //   }
-  const {account,createLiquidityAndPool,tokenData,getAllLiquidity,removeLiquidityAndUpdateUserdata} = useContext(SwapTokenContext);
+  const {account,createLiquidityAndPool,tokenData,getAllLiquidity,removeLiquidityAndUpdateUserdata, collectFees} = useContext(SwapTokenContext);
   const [closePool,setClosePool] = useState(false);
   return (
     <div className={Style.Pool}>
       {closePool?(
       <PoolAdd account={account} setClosePool={setClosePool} tokenData={tokenData} createLiquidityAndPool={createLiquidityAndPool} />
       ):(
-      <PoolConnect setClosePool={setClosePool} getAllLiquidity={getAllLiquidity} removeLiquidityAndUpdateUserdata={removeLiquidityAndUpdateUserdata} account={account} />
+      <PoolConnect setClosePool={setClosePool} getAllLiquidity={getAllLiquidity} removeLiquidityAndUpdateUserdata={removeLiquidityAndUpdateUserdata} account={account} collectFees={collectFees} />
       )}
     </div>
   );

@@ -7,7 +7,7 @@ import Style from "./PoolAdd.module.css";
 import Token from "../Token/Token";
 import SearchToken from "../SearchToken/SearchToken";
 
-const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
+const PoolAdd = ({ setClosePool, tokenData, createLiquidityAndPool }) => {
   const [openModel, setOpenModel] = useState(false);
   const [openTokenModelOne, setOpenTokenModelOne] = useState(false);
   const [openTokenModelTwo, setOpenTokenModelTwo] = useState(false);
@@ -16,45 +16,45 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
 
-  const [fee,setFee]=useState(0);
-  const [slippage,setSlippage]=useState(25);
-  const [deadline,setDeadline]=useState(20);
-  const [tokenAmountOne,setTokenAmountOne]=useState(0);
-  const [tokenAmountTwo,setTokenAmountTwo]=useState(0);
+  const [fee, setFee] = useState(0);
+  const [slippage, setSlippage] = useState(25);
+  const [deadline, setDeadline] = useState(20);
+  const [tokenAmountOne, setTokenAmountOne] = useState(0);
+  const [tokenAmountTwo, setTokenAmountTwo] = useState(0);
 
-  const [tokenOne,setTokenOne]=useState({
-      name:"",
-      image:"",
-      symbol:"",
-      tokenBalance:"",
-      tokenAddress:""
-    });
-    const [tokenTwo,setTokenTwo]=useState({
-      name:"",
-      image:"",
-      symbol:"",
-      tokenBalance:"",
-      tokenAddress:""
-    });
+  const [tokenOne, setTokenOne] = useState({
+    name: "",
+    image: "",
+    symbol: "",
+    tokenBalance: "",
+    tokenAddress: "",
+  });
+  const [tokenTwo, setTokenTwo] = useState({
+    name: "",
+    image: "",
+    symbol: "",
+    tokenBalance: "",
+    tokenAddress: "",
+  });
 
   const feePairs = [
     {
       fee: "0.05%",
       info: "Best for stable pairs",
       number: "0% Select",
-      feeSystem:500
+      feeSystem: 500,
     },
     {
       fee: "0.3%",
       info: "Best for stable pairs",
       number: "0% Select",
-      feeSystem:3000
+      feeSystem: 3000,
     },
     {
       fee: "1%",
       info: "Best for stable pairs",
       number: "0% Select",
-      feeSystem:1000
+      feeSystem: 1000,
     },
   ];
 
@@ -79,7 +79,13 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
       <div className={Style.PoolAdd_box}>
         <div className={Style.PoolAdd_box_header}>
           <div className={Style.PoolAdd_box_header_left}>
-            <Image src={images.arrowLeft} alt="image" width={30} height={30} onClick= {()=>setClosePool(false)}/>
+            <Image
+              src={images.arrowLeft}
+              alt="image"
+              width={30}
+              height={30}
+              onClick={() => setClosePool(false)}
+            />
           </div>
           <div className={Style.PoolAdd_box_header_middle}>
             <p>Add Liquidity</p>
@@ -87,7 +93,8 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
 
           <div className={Style.PoolAdd_box_header_right}>
             <p>
-              {tokenOne.name || ""}{tokenOne.tokenBalance.slice(0,9) || ""}
+              {tokenOne.name || ""}
+              {tokenOne.tokenBalance.slice(0, 9) || ""}
               {""}
               {""}
             </p>
@@ -196,7 +203,7 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
                   <div
                     className={Style.PoolAdd_box_price_left_list_item}
                     key={i + 1}
-                    onClick={() => (setActive(i + 1),setFee(el.feeSystem))}
+                    onClick={() => (setActive(i + 1), setFee(el.feeSystem))}
                   >
                     <div
                       className={Style.PoolAdd_box_price_left_list_item_content}
@@ -230,12 +237,17 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
               <h4>Deposit Amount</h4>
 
               <div className={Style.PoolAdd_box_deposit_box}>
-                <input type="number" placeholder={tokenOne.tokenBalance.slice(0,9)} onChange={(e)=>setTokenAmountOne(e.target.value)}/>
+                <input
+                  type="number"
+                  placeholder={tokenOne.tokenBalance.slice(0, 9)}
+                  onChange={(e) => setTokenAmountOne(e.target.value)}
+                />
 
                 <div className={Style.PoolAdd_box_deposit_box_input}>
                   <p>
-                    <small>{tokenOne.name || "ETH"}</small> {""}{""}
-                    {tokenOne.symbol||"ETH"}
+                    <small>{tokenOne.name || "ETH"}</small> {""}
+                    {""}
+                    {tokenOne.symbol || "ETH"}
                   </p>
                   <p className={Style.PoolAdd_box_deposit_box_input_balance}>
                     Balance: 0.00
@@ -244,11 +256,16 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
               </div>
 
               <div className={Style.PoolAdd_box_deposit_box}>
-                <input type="number" placeholder={tokenTwo.tokenBalance.slice(0,9)} onChange={(e)=>setTokenAmountTwo(e.target.value)} />
+                <input
+                  type="number"
+                  placeholder={tokenTwo.tokenBalance.slice(0, 9)}
+                  onChange={(e) => setTokenAmountTwo(e.target.value)}
+                />
                 <div className={Style.PoolAdd_box_deposit_box_input}>
                   <p>
-                    <small>{tokenTwo.name || "ETH"}</small> {""}{""}
-                    {tokenTwo.symbol||"Select"}
+                    <small>{tokenTwo.name || "ETH"}</small> {""}
+                    {""}
+                    {tokenTwo.symbol || "Select"}
                   </p>
                   {/* <p className={Style.PoolAdd_box_deposit_box_input_balance}>
                     Balance: 0.00
@@ -264,7 +281,8 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
 
             <div className={Style.PoolAdd_box_price_right_box}>
               <p className={Style.PoolAdd_box_price_right_box_para}>
-                Current Price: 41.1494 {tokenOne.name || "ETH"} per {tokenTwo.name || "Select"}
+                Current Price: 41.1494 {tokenOne.name || "ETH"} per{" "}
+                {tokenTwo.name || "Select"}
               </p>
               <Image src={images.wallet} alt="wallet" height={80} width={80} />
               <h3>Your position will appear here.</h3>
@@ -280,9 +298,11 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
                   min="0.00"
                   step="0.001"
                   className={Style.PoolAdd_box_price_right_range_box_para}
-                  onChange={(e)=>setMinPrice(e.target.value)}
+                  onChange={(e) => setMinPrice(e.target.value)}
                 />
-                <p>{tokenOne.name || "ETH"} per {tokenTwo.name || "Select"}</p>
+                <p>
+                  {tokenOne.name || "ETH"} per {tokenTwo.name || "Select"}
+                </p>
               </div>
 
               {/* //MAX */}
@@ -294,9 +314,11 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
                   min="0.00"
                   step="0.001"
                   className={Style.PoolAdd_box_price_right_range_box_para}
-                  onChange={(e)=>setMaxPrice(e.target.value)}
+                  onChange={(e) => setMaxPrice(e.target.value)}
                 />
-                <p>{tokenOne.name || "ETH"} per {tokenTwo.name || "Select"}</p>
+                <p>
+                  {tokenOne.name || "ETH"} per {tokenTwo.name || "Select"}
+                </p>
               </div>
             </div>
 
@@ -306,19 +328,23 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
             </div> */}
 
             <div className={Style.PoolAdd_box_price_right_amount}>
-              <button onClick={()=>
-                createLiquidityAndPool({
-                  tokenAddress0:tokenOne.tokenAddress.tokenAddress,
-                  tokenAddress1:tokenTwo.tokenAddress.tokenAddress,
-                  fee:fee,
-                  tokenPrice1:minPrice,
-                  tokenPrice2:maxPrice,
-                  slippage:slippage,
-                  deadline:deadline,
-                  tokenAmount0:tokenAmountOne,
-                  tokenAmount1:tokenAmountTwo
-              })
-              }>Add Liquidity</button>
+              <button
+                onClick={() =>
+                  createLiquidityAndPool({
+                    tokenAddress0: tokenOne.tokenAddress.tokenAddress,
+                    tokenAddress1: tokenTwo.tokenAddress.tokenAddress,
+                    fee: fee,
+                    tokenPrice1: minPrice,
+                    tokenPrice2: maxPrice,
+                    slippage: slippage,
+                    deadline: deadline,
+                    tokenAmount0: tokenAmountOne,
+                    tokenAmount1: tokenAmountTwo,
+                  })
+                }
+              >
+                Add Liquidity
+              </button>
             </div>
           </div>
         </div>
@@ -326,28 +352,31 @@ const PoolAdd = ({setClosePool,tokenData,createLiquidityAndPool}) => {
 
       {openModel && (
         <div className={Style.token}>
-          <Token setOpenSetting={setOpenModel} 
-                setSlippage={setSlippage}
-                slippage={slippage}
-                deadline={deadline}
-                setDeadline={setDeadline}
-                />
+          <Token
+            setOpenSetting={setOpenModel}
+            setSlippage={setSlippage}
+            slippage={slippage}
+            deadline={deadline}
+            setDeadline={setDeadline}
+          />
         </div>
       )}
       {openTokenModelOne && (
         <div className={Style.token}>
-          <SearchToken 
+          <SearchToken
             tokens={setTokenOne}
             tokenData={tokenData}
-            setOpenToken={setOpenTokenModelOne} />
+            setOpenToken={setOpenTokenModelOne}
+          />
         </div>
       )}
       {openTokenModelTwo && (
         <div className={Style.token}>
-          <SearchToken 
+          <SearchToken
             tokens={setTokenTwo}
             tokenData={tokenData}
-            setOpenToken={setOpenTokenModelTwo} />
+            setOpenToken={setOpenTokenModelTwo}
+          />
         </div>
       )}
     </div>
